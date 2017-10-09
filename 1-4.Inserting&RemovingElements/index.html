@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<head>
+	<title>D3v4入門 - 1-4.Selection (Inserting and removing elements)</title>
+</head>
+
+<style>
+p{
+	margin: 0;
+	margin-top: 20px;
+}
+
+svg{
+  background-color: #eee;
+	margin: 0;
+}
+
+.d3_text{
+	font-size: 30px;
+  fill: rgb(56, 70, 126);
+}
+</style>
+
+<body>
+	<p>append</p>
+  <svg width="500" height="100">
+		<g class='append' transform="translate(250, 50)">
+			<circle r="40" fill='rgb(123, 136, 134)'></circle>
+		</g>
+	</svg>
+
+	<p>insert</p>
+  <svg width="500" height="100">
+		<g class='insert' transform="translate(250, 50)">
+			<circle r="40" fill='rgb(123, 136, 134)'></circle>
+		</g>
+	</svg>
+
+	<p>remove</p>
+	<svg class='remove' width="500" height="100">
+			<circle r="30" cx='100' cy='50' fill='rgb(123, 136, 134)'></circle>
+			<circle r="30" cx='250' cy='50' fill='rgb(123, 136, 134)'></circle>
+			<circle r="30" cx='400' cy='50' fill='rgb(123, 136, 134)'></circle>
+	</svg>
+
+</div>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/4.10.2/d3.js"></script>
+<script>
+
+// append
+// 指定した要素（.append）の最後に追加される
+d3.select('.append')
+	.append('text')
+	.text('append')
+	.classed('d3_text', true);
+
+// insert
+// 要素を追加する場所を指定できる。circleを指定することで、circleの前に挿入される。
+d3.select('.insert')
+	.insert('text', 'circle')
+	.text('insert')
+	.classed('d3_text', true);
+
+// remove(クリックされた要素を削除)
+d3.select('.remove').selectAll('circle')
+	.on('click', function(d, i){
+		d3.select(this).remove();
+});
+
+</script>
+</body>
+</html>

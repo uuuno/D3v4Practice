@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<head>
+	<title>D3v4入門 - 1-2.Selection (Updating selections with functions)</title>
+</head>
+
+<style>
+svg{
+  background-color: #eee;
+}
+
+.active{
+  fill: green;
+}
+</style>
+
+<body>
+  <svg width="500" height="500">
+  		<circle r="30"></circle>
+  		<circle r="30"></circle>
+  		<circle r="30"></circle>
+  </svg>
+</div>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/4.10.2/d3.js"></script>
+<script>
+
+// 「circle」を順番にずらす
+// functionの第2引数のiに「circle」要素数分（ここでは3つ）が0,1,2の順番に入る
+d3.selectAll('circle')
+  .attr('cx', function(d, i){
+    return (i*100)+100;
+  })
+  .attr('cy', function(d, i){
+    return (i*100)+100;
+  });
+
+</script>
+</body>
+</html>

@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<head>
+	<title>D3v4入門 - 1-3.Selection (Handling events)</title>
+</head>
+
+<style>
+p{
+	margin: 0;
+	margin-top: 20px;
+}
+
+svg{
+  background-color: #eee;
+	margin: 0;
+}
+
+.active{
+  fill: green;
+}
+</style>
+
+<body>
+	<p id='click_status'>click</p>
+  <svg class='e_click' width="500" height="100">
+  		<circle r="30" cx='100' cy='50' fill='rgb(123, 136, 134)'></circle>
+  		<circle r="30" cx='250' cy='50' fill='rgb(123, 136, 134)'></circle>
+  		<circle r="30" cx='400' cy='50' fill='rgb(123, 136, 134)'></circle>
+  </svg>
+
+	<p>mouseenter / mouseleave</p>
+	<svg class='e_mouseenter' width="500" height="100">
+			<circle r="30" cx='100' cy='50' fill='rgb(123, 136, 134)'></circle>
+			<circle r="30" cx='250' cy='50' fill='rgb(123, 136, 134)'></circle>
+			<circle r="30" cx='400' cy='50' fill='rgb(123, 136, 134)'></circle>
+	</svg>
+
+	<p>mouseover / mouseout</p>
+	<svg class='e_mouseover' width="500" height="100">
+			<circle r="30" cx='100' cy='50' fill='rgb(123, 136, 134)'></circle>
+			<circle r="30" cx='250' cy='50' fill='rgb(123, 136, 134)'></circle>
+			<circle r="30" cx='400' cy='50' fill='rgb(123, 136, 134)'></circle>
+	</svg>
+
+	<p>mousemove</p>
+	<svg class='e_mousemove' width="500" height="100">
+			<circle r="30" cx='100' cy='50' fill='rgb(123, 136, 134)'></circle>
+			<circle r="30" cx='250' cy='50' fill='rgb(123, 136, 134)'></circle>
+			<circle r="30" cx='400' cy='50' fill='rgb(123, 136, 134)'></circle>
+	</svg>
+</div>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/4.10.2/d3.js"></script>
+<script>
+
+colors = ['rgb(73, 184, 147)', 'rgb(217, 216, 103)', 'rgb(186, 84, 133)']
+
+// clickイベント
+d3.select('.e_click').selectAll('circle')
+	.on('click', function(d, i){
+		d3.select(this)
+			.style('fill', colors[i%3]);
+		d3.select('#click_status')
+			.text(i + '番目の円がクリックされました。')
+	});
+
+// マウスオンイベント
+d3.select('.e_mouseenter').selectAll('circle')
+	.on('mouseenter', function(d, i){
+		d3.select(this)
+			.style('fill', colors[i%3])
+	})
+	.on('mouseleave', function(d, i){
+		d3.select(this)
+			.style('fill', '')
+	});
+
+// マウスオンイベント
+// 「mouseover/out」はmouseenter/leaveとは違い、子要素でもイベントが発生するので、あえて使う場面は少ないかも
+d3.select('.e_mouseover').selectAll('circle')
+	.on('mouseover', function(d, i){
+		d3.select(this)
+			.style('fill', colors[i%3])
+	})
+	.on('mouseout', function(d, i){
+		d3.select(this)
+			.style('fill', '')
+	});
+
+// マウスムーブイベント
+d3.select('.e_mousemove').selectAll('circle')
+	.on('mousemove', function(d, i){
+		d3.select(this)
+			.style('fill', colors[i%3]);
+	});
+
+</script>
+</body>
+</html>

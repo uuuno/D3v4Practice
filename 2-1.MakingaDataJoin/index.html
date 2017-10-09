@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<head>
+	<title>D3v4入門 - 2-1.Data joins (Making Data Join)</title>
+</head>
+
+<style>
+h2{
+	margin: 0;
+	margin-top: 20px;
+}
+
+svg{
+  background-color: #eee;
+	margin: 0;
+}
+
+</style>
+
+<body>
+	<h2></h2>
+	<svg width="800" height="200">
+		<g transform="translate(0, 100)">
+			<circle></circle>
+			<circle></circle>
+			<circle></circle>
+			<circle></circle>
+			<circle></circle>
+		</g>
+	</svg>
+
+
+</div>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/4.10.2/d3.js"></script>
+<script>
+
+// 5種類の半径を、配列に格納
+var r_data = [10, 35, 50, 20, 40];
+
+d3.selectAll('circle')
+	.data(r_data)
+	.attr('cx', function(d, i){
+		return (i+1)*120;
+	})
+	.attr('r', function(d, i){
+		return d;
+	});
+
+
+</script>
+</body>
+</html>

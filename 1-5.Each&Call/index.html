@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<head>
+	<title>D3v4入門 - 1-5.Selection (Each and call)</title>
+</head>
+
+<style>
+h2{
+	margin: 0;
+	margin-top: 20px;
+}
+
+svg{
+  background-color: #eee;
+	margin: 0;
+}
+
+.d3_text{
+	font-size: 50px;
+  fill: rgb(16, 77, 108);
+}
+</style>
+
+<body>
+	<h2>each</h2>
+	<svg class='each' width="500" height="100">
+		<g class="item" transform="translate(100, 50)"></g>
+		<g class="item" transform="translate(250, 50)"></g>
+		<g class="item" transform="translate(400, 50)"></g>
+	</svg>
+
+	<h2>call</h2>
+	<svg class='call' width="500" height="100">
+		<g class="item" transform="translate(100, 50)"></g>
+		<g class="item" transform="translate(250, 50)"></g>
+		<g class="item" transform="translate(400, 50)"></g>
+	</svg>
+
+</div>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/4.10.2/d3.js"></script>
+<script>
+
+// each
+// 関数addCircleによりg要素に順番にcicleとtextを追加していく
+// 共通して使う処理を関数にしておくことで、再度記述する必要なく何回でもeachで呼び出せる
+function addCircle(d, i) {
+  d3.select(this) // ここでの「this」は「d3.select('.each').selectAll('g')」で指定したg要素が順番に入る
+    .append('circle')
+    .attr('r', 40)
+		.style('fill', 'rgb(123, 136, 134)');
+
+  d3.select(this)
+    .append('text')
+    .text(i + 1)
+		.classed('d3_text', true)
+		.attr('x', -15)
+		.attr('y', 20);
+}
+
+d3.select('.each').selectAll('g')
+  .each(addCircle);
+
+
+// call
+// callではeachと違い、dとiではなく、指定した要素そのものを渡す
+function addCircle_call(selection) {
+  selection // 要素そのものが渡されるので、「d3.select(this)」ではなく「selection」でで指定する
+    .append('circle')
+    .attr('r', 40)
+		.style('fill', 'rgb(123, 136, 134)');;
+
+  selection //
+    .append('text')
+    .text(function(d, i){return i+1}) //引数にd,iが直接渡されていないので、functionにより呼び出す必要がある
+		// .text(i + 1) // <-- これだとエラー
+		.classed('d3_text', true)
+		.attr('x', -15)
+		.attr('y', 20);
+}
+
+d3.select('.call').selectAll('g')
+  .call(addCircle_call);
+
+
+///// eachやcallを使わない場合 /////
+// 下記のようにすればeachを使わなくても可能だが、他のクラスで同様の処理を行う場合は再記述が必要になってしまう
+// d3.select('.each').selectAll('g')
+// 	.append('circle')
+// 	.attr('r', 40)
+// 	.style('fill', 'rgb(123, 136, 134)');
+//
+// d3.select('.each').selectAll('g')
+// 	.append('text')
+// 	.text(function(d, i){return i})
+// 	.classed('d3_text', true)
+// 	.attr('x', -15)
+// 	.attr('y', 20);
+//////////////////////////////////
+
+</script>
+</body>
+</html>

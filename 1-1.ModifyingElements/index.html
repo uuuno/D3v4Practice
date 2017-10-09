@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<head>
+	<title>D3v4入門 - 1-1.Selection (Modifying elements)</title>
+</head>
+
+<style>
+svg{
+  background-color: #eee;
+}
+
+.active{
+  fill: green;
+}
+</style>
+
+<body>
+<div class='html_area'></div>
+<div class="d3_area">
+  <div id='title'></div>
+  <svg width="500" height="500">
+  		<circle id='no1' r="30" cx='100' cy='100'></circle>
+  		<circle id='no2' r="30" cx="200" cy='200'></circle>
+  		<circle id='no3' r="30" cx="300" cy='300'></circle>
+  </svg>
+</div>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/4.10.2/d3.js"></script>
+<script>
+
+// 色を変える（selectAll）
+d3.select('.d3_area').select('svg').selectAll('circle')
+  .style('fill', 'red')
+
+// 色を変える（select）
+// selectは1つの要素のみ。複数ある場合は最初の要素に適用される
+d3.select('.d3_area').select('#no1')
+  .style('fill', 'orange')
+
+// 大きさ（半径）を変える
+d3.select('#no1')
+  .attr('r', 50);
+d3.select('#no2')
+  .attr('r', 30);
+d3.select('#no3')
+  .attr('r', 20);
+
+// クラスを追加する
+d3.select('#no2')
+  .classed('active', true);
+
+// テキストを書き換える
+d3.select('#title')
+  .text('D3v4 - Selection')
+
+d3.select('.html_area')
+  .html('<b>HTML</b>')
+</script>
+</body>
+</html>

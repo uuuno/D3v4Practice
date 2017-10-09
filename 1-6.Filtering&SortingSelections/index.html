@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<head>
+	<title>D3v4入門 - 1-6.Selection (Filtering and sorting selections)</title>
+</head>
+
+<style>
+h2{
+	margin: 0;
+	margin-top: 20px;
+}
+
+svg{
+  background-color: #eee;
+	margin: 0;
+}
+
+</style>
+
+<body>
+
+	<h2>filter</h2>
+	<svg class='filter' width="500" height="100">
+			<circle r="30" cx='100' cy='50' fill='rgb(123, 136, 134)'></circle>
+			<circle r="30" cx='250' cy='50' fill='rgb(123, 136, 134)'></circle>
+			<circle r="30" cx='400' cy='50' fill='rgb(123, 136, 134)'></circle>
+	</svg>
+
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/4.10.2/d3.js"></script>
+<script>
+
+// filter
+d3.select('.filter').selectAll('circle')
+	.filter(function(d, i){
+		return i%2 === 0; //ここがtrueの場合にのみ、下の処理が適用される
+	})
+	.style('fill', 'rgb(5, 190, 184)');
+
+// sort
+//ソートも下記のようにすればできるが、ここでは紹介だけ（まだData joinをしていないので）
+// d3.selectAll('.element')
+// 	.sort(function(a, b) {
+// 		return b.score - a.score;
+// 	});
+
+</script>
+</body>
+</html>
