@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<head>
+	<title>D3v4入門 - 3-1.Enter and exit (.enter)</title>
+</head>
+
+<style>
+h2{
+	margin: 0;
+	margin-top: 20px;
+}
+svg{
+  background-color: #eee;
+	margin: 0;
+}
+
+circle{
+  fill: rgb(123, 136, 134);
+}
+</style>
+
+<body>
+
+	<h2>enterなし</h2>
+	<svg class='without_enter' width="800" height="100">
+    <g class="circle_area" transform='translate(0, 50)'>
+			<circle></circle>
+			<circle></circle>
+			<circle></circle>
+    </g>
+    <g class="text_area" transform='translate(0, 50)'>
+      <text></text>
+      <text></text>
+      <text></text>
+    </g>
+	</svg>
+
+  <h2>enterあり</h2>
+  <svg class='with_enter' width="800" height="100">
+    <g class="circle_area" transform='translate(0, 50)'>
+      <circle></circle>
+      <circle></circle>
+      <circle></circle>
+    </g>
+    <g class="text_area" transform='translate(0, 50)'>
+      <text></text>
+      <text></text>
+      <text></text>
+    </g>
+  </svg>
+
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/4.10.2/d3.js"></script>
+<script>
+
+var c_data = ['tokyo', 'osaka', 'fukuoka', 'kanagawa', 'sendai'];
+
+// enterなし
+// c_dataには5つデータがあるが、用意したcircleは3つなので、c_dataの後ろ2つのデータは適用されない
+d3.select('.without_enter').select('.circle_area').selectAll('circle')
+  .data(c_data)
+  .attr('r', 30)
+  .attr('cx', function(d, i){
+    return (i+1)*120;
+  });
+
+d3.select('.without_enter').select('.text_area').selectAll('text')
+  .data(c_data)
+  .text(function(d, i){
+    return d;
+  })
+  .attr('x', function(d, i){
+    return (i+1)*120;
+  });
+
+
+// enterあり
+// 「enter()」により足りない分の要素が作られる
+// なお、enter()の処理は、enterにより追加された要素にしか適用なれないので注意が必要。そのため、ここでは半径とx座標の同じattrを2回行う必要がある。
+// 中途半端に準備した要素がある場合には、2重で処理を行なわなければならないので、要素は用意せずにすべてenterで追加するのが一般的
+d3.select('.with_enter').select('.circle_area').selectAll('circle')
+  .data(c_data)
+  .attr('r', 30)
+  .attr('cx', function(d, i){
+    return (i+1)*120;
+  })
+  .enter()
+  .append('circle') // ここから足りない分のデータのcircle要素が作られる
+  .attr('r', 30)
+  .attr('cx', function(d, i){
+    return (i+1)*120;
+  });
+
+d3.select('.with_enter').select('.text_area').selectAll('text')
+  .data(c_data)
+  .text(function(d, i){
+    return d;
+  })
+  .attr('x', function(d, i){
+    return (i+1)*120;
+  })
+  .enter()
+  .append('text') // ここから足りない分のデータのtext要素が作られる
+  .text(function(d, i){
+    return d;
+  })
+  .attr('x', function(d, i){
+    return (i+1)*120;
+  });
+
+</script>
+</body>
+</html>

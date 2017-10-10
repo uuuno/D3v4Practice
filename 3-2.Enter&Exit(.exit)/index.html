@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<head>
+	<title>D3v4入門 - 3-1.Enter and exit (.exit)</title>
+</head>
+
+<style>
+h2{
+	margin: 0;
+	margin-top: 20px;
+}
+svg{
+  background-color: #eee;
+	margin: 0;
+}
+
+circle{
+  fill: rgb(123, 136, 134);
+}
+</style>
+
+<body>
+
+	<h2>exit</h2>
+	<svg class='exit' width="800" height="100">
+    <g class="circle_area" transform='translate(0, 50)'>
+			<circle></circle>
+			<circle></circle>
+			<circle></circle>
+    </g>
+    <g class="text_area" transform='translate(0, 50)'>
+      <text></text>
+      <text></text>
+      <text></text>
+    </g>
+	</svg>
+
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/4.10.2/d3.js"></script>
+<script>
+
+var c_data = ['tokyo', 'osaka'];
+
+// exit
+// circle要素は3つデータあるが、c_dataは2つしかない場合には、余分に用意したcircle要素はexitにより操作できる
+// remove()で用意した余分な要素を削除することも可能
+d3.select('.exit').select('.circle_area').selectAll('circle')
+  .data(c_data)
+	.attr('r', 30)
+	.attr('cx', function(d, i){
+		return (i+1)*120;
+		})
+	.exit()
+	.attr('r', 30)
+	.attr('cx', function(d, i){
+		return (i+1)*120;
+		})
+	.style('fill', 'rgb(147, 152, 209)');
+
+
+d3.select('.exit').select('.text_area').selectAll('text')
+  .data(c_data)
+  .text(function(d, i){
+    return d;
+  })
+  .attr('x', function(d, i){
+    return (i+1)*120;
+  })
+	.exit()
+	.text('nodata')
+  .attr('x', function(d, i){
+    return (i+1)*120;
+  });
+
+
+</script>
+</body>
+</html>

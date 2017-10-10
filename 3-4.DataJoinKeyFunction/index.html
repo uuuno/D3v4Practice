@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<head>
+	<title>D3v4入門 - 3-3.Enter and exit (.merge)</title>
+</head>
+
+<style>
+h2{
+	margin: 0;
+	margin-top: 20px;
+}
+
+.add{
+	width: 150px;
+	padding: 10px;
+	font-size: 15px;
+	background: none;
+	color: rgb(65, 255, 93);
+	border: 3px solid rgb(65, 255, 93);
+	cursor: pointer;
+}
+
+.add:hover{
+	background: rgb(223, 255, 218);
+}
+
+
+svg{
+  background-color: #eee;
+	margin: 0;
+}
+
+circle{
+  fill: rgb(123, 136, 134);
+}
+
+.initial{
+	fill: rgb(56, 255, 118);
+}
+
+</style>
+
+<body>
+	<button class='add' onClick="add();">Add</button>
+  <h2>あり</h2>
+  <svg class='with_key' width="800" height="100">
+    <g class="circle_area" transform='translate(120, 50)'>
+    </g>
+    <g class="text_area" transform='translate(120, 50)'>
+    </g>
+  </svg>
+
+	<h2>なし</h2>
+	<svg class='without_key' width="800" height="100">
+		<g class="circle_area" transform='translate(120, 50)'>
+		</g>
+		<g class="text_area" transform='translate(120, 50)'>
+		</g>
+	</svg>
+
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/4.10.2/d3.js"></script>
+<script>
+
+var c_data = ['tokyo', 'osaka', 'fukuoka', 'kanagawa', 'sendai'];
+var i = c_data.length-1;
+
+
+function add() {
+	if(i < 0)
+		return;
+	present_c_data = c_data.slice(i,c_data.length);
+	update(present_c_data);
+	update_without(present_c_data);
+	i--;
+}
+
+// あり
+function update(present_c_data){
+	var u_circle = d3.select('.with_key').select('.circle_area')
+		.selectAll('circle')
+		.data(present_c_data, function(d) {
+			return d;
+		});
+
+	u_circle.enter()
+		.append('circle') // ここから足りない分のデータのcircle要素が作られる
+		.merge(u_circle)
+		.transition()
+		.duration(1000)
+	  .attr('r', 30)
+	  .attr('cx', function(d, i){
+	    return i*120;
+	  });
+
+
+	var u_text = d3.select('.with_key').select('.text_area')
+		.selectAll('text')
+		.data(present_c_data, function(d) {
+			return d;
+		});
+
+	u_text.enter()
+	  .append('text')
+		.merge(u_text)
+		.transition()
+		.duration(1000)
+	  .text(function(d, i){
+	    return d;
+	  })
+	  .attr('x', function(d, i){
+	    return i*120;
+	  });
+}
+
+
+// なし
+function update_without(present_c_data){
+	var u_circle = d3.select('.without_key').select('.circle_area')
+		.selectAll('circle')
+	  .data(present_c_data);
+
+
+	u_circle.enter()
+		.append('circle')
+		.merge(u_circle)
+		.transition()
+		.duration(1000)
+	  .attr('r', 30)
+	  .attr('cx', function(d, i){
+	    return i*120;
+	  });
+
+
+	var u_text = d3.select('.without_key').select('.text_area')
+		.selectAll('text')
+	  .data(present_c_data);
+
+	u_text.enter()
+	  .append('text')
+		.merge(u_text)
+		.transition()
+		.duration(1000)
+	  .text(function(d, i){
+	    return d;
+	  })
+	  .attr('x', function(d, i){
+	    return i*120;
+	  });
+}
+
+add();
+d3.selectAll('circle').classed('initial', true);
+
+
+</script>
+</body>
+</html>
