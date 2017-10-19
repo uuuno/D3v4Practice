@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<head>
+	<title>D3v4入門 - 4-1.Scale functions (Scales with continuous input and continuous output)</title>
+</head>
+
+<style>
+
+svg{
+  background-color: #eee;
+	margin: 0;
+}
+
+circle{
+  fill: rgb(123, 136, 134);
+}
+
+</style>
+
+<body>
+
+	<h2>scaleLinear（線形）</h2>
+	<svg class="linear" width="500" height="100">
+		<g class="circle_area" transform='translate(0, 50)'></g>
+		<g class="text_area" transform='translate(0, 50)'></g>
+	</svg>
+
+	<h2>scalePow（累乗）</h2>
+	<svg class="pow" width="500" height="100">
+		<g class="circle_area" transform='translate(0, 50)'></g>
+		<g class="text_area" transform='translate(0, 50)'></g>
+	</svg>
+
+	<h2>scaleSqrt（平方根）</h2>
+	<svg class="sqrt" width="500" height="100">
+		<g class="circle_area" transform='translate(0, 50)'></g>
+		<g class="text_area" transform='translate(0, 50)'></g>
+	</svg>
+
+	<h2>scaleLog（LOG）</h2>
+	<svg class="log" width="500" height="100">
+		<g class="circle_area" transform='translate(10, 50)'></g>
+		<g class="text_area" transform='translate(10, 50)'></g>
+	</svg>
+
+	<h2>scaleTime（時間）</h2>
+	<svg class="time" width="500" height="100">
+		<g class="circle_area" transform='translate(1, 50)'></g>
+		<g class="text_area" transform='translate(1, 50)' font-size="10"></g>
+	</svg>
+
+	<h2>scaleSequential（プリセットへの出力）</h2>
+	<svg class="sequential" width="500" height="100">
+		<g class="circle_area" transform='translate(0, 50)'></g>
+		<g class="text_area" transform='translate(0, 50)' font-size="10"></g>
+	</svg>
+
+	<h2>clamping（最小・最大の固定）</h2>
+	domain()で設定した範囲外の数値を入力した場合に、そのままの変換値を返すのでなく、range()の終端値を返すようにする。
+	<svg class="clamp" width="500" height="100">
+		<g class="circle_area" transform='translate(0, 50)'></g>
+		<g class="text_area" transform='translate(0, 50)' font-size="10"></g>
+		<g class="circle_area2" transform='translate(0, 50)'></g>
+		<g class="text_area2" transform='translate(0, 50)' font-size="10"></g>
+	</svg>
+
+	<h2>nice（自動調整）</h2>
+	<svg class="nice" width="500" height="100">
+		<g class="axis_withoutNice" transform='translate(0, 30)'></g>
+		<g class="axis_withNice" transform='translate(0, 60)'></g>
+	</svg>
+
+	<h2>invert（逆変換）</h2>
+	<svg class="invert" width="500" height="100">
+		<g tranform='translate(20, 10)'>
+			<g class="axis_invert" transform='translate(0, 40)'></g>
+			<rect class="click-area"></rect>
+		</g>
+	</svg>
+	<div class="invert_info">Click on the grey band</div>
+
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/4.10.2/d3.js"></script>
+<script>
+
+// scaleLinear
+var linear_data = [2, 10, 20, 34, 56, 88];
+
+var scaleLinear = d3.scaleLinear()
+	.domain([0, 100])
+	.range([0, 500]);
+
+var scaleLinearColor = d3.scaleLinear()
+	.domain([0, 100])
+	.range(['yellow', 'red']);
+
+d3.select('.linear .circle_area')
+	.selectAll('circle')
+	.data(linear_data)
+	.enter()
+	.append('circle')
+	.attr('r', 3)
+	.attr('cx', function(d){
+		return scaleLinear(d);
+	})
+	.style('fill', function(d){
+		return scaleLinearColor(d);
+	});
+
+d3.select('.linear .text_area')
+	.selectAll('text')
+	.data(linear_data)
+	.enter()
+	.append('text')
+	.attr('x', function(d){
+		return scaleLinear(d);
+	})
+	.text(function(d){
+		return d;
+		// return scaleLinearColor(d);
+	})
+	.style('fill', function(d){
+		return scaleLinearColor(d);
+	});
+
+// scalePow
+var pow_data = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+
+var scalePow = d3.scalePow()
+	.exponent(2)
+	.domain([0, 11])
+	.range([0, 500]);
+
+d3.select('.pow .circle_area')
+	.selectAll('circle')
+	.data(pow_data)
+	.enter()
+	.append('circle')
+	.attr('r', 3)
+	.attr('cx', function(d){
+		return scalePow(d);
+	});
+
+d3.select('.pow .text_area')
+	.selectAll('text')
+	.data(pow_data)
+	.enter()
+	.append('text')
+	.attr('x', function(d){
+		return scalePow(d);
+	})
+	.text(function(d){
+		return d;
+	});
+
+// scaleSqrt
+var sqrt_data = [1, 4, 9, 16, 25, 36, 49];
+
+var scaleSqrt = d3.scaleSqrt()
+	.domain([0, 49])
+	.range([0, 30]);　// 値が49（7^2）の時に30に変換
+
+d3.select('.sqrt .circle_area')
+	.selectAll('circle')
+	.data(sqrt_data)
+	.enter()
+	.append('circle')
+	.attr('r', function(d){
+		return scaleSqrt(d);
+	})
+	.attr('cx', function(d, i){
+		return (i+1)*60;
+	});
+	d3.select('.sqrt .text_area')
+		.selectAll('text')
+		.data(sqrt_data)
+		.enter()
+		.append('text')
+		.text(function(d){
+			return parseInt(scaleSqrt(d));
+		})
+		.attr('x', function(d, i){
+			return (i+1)*60;
+		});
+
+// scaleLog
+var log_data = [1, 10, 100, 1000, 10000, 100000];
+
+var scaleLog = d3.scaleLog()
+	.domain([1, 1000000])
+	.range([0, 500]);
+
+d3.select('.log .circle_area')
+	.selectAll('circle')
+	.data(log_data)
+	.enter()
+	.append('circle')
+	.attr('r', 3)
+	.attr('cx', function(d){
+		return scaleLog(d);
+	});
+
+d3.select('.log .text_area')
+	.selectAll('text')
+	.data(log_data)
+	.enter()
+	.append('text')
+	.text(function(d){
+		return d;
+	})
+	.attr('x', function(d){
+		return scaleLog(d);
+	});
+
+// scaleTime
+var time_data = [new Date(2017, 0, 1), new Date(2017, 4, 10), new Date(2017, 8, 31)];
+
+var scaleTime = d3.scaleTime()
+	.domain([new Date(2017, 0, 1), new Date(2018, 0, 1)])
+	.range([0, 500]);
+
+d3.select('.time .circle_area')
+	.selectAll('circle')
+	.data(time_data)
+	.enter()
+	.append('circle')
+	.attr('r', 3)
+	.attr('cx', function(d){
+		return scaleTime(d);
+	});
+
+d3.select('.time .text_area')
+	.selectAll('text')
+	.data(time_data)
+	.enter()
+	.append('text')
+	.text(function(d){
+		return d.toDateString();
+	})
+	.attr('x', function(d){
+		return scaleTime(d);
+	});
+
+// scaleSequential
+var sequential_data = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+
+var scaleSequential = d3.scaleSequential()
+	.domain([0, 10])
+	.interpolator(d3.interpolateRainbow);
+
+d3.select('.sequential .circle_area')
+	.selectAll('circle')
+	.data(sequential_data)
+	.enter()
+	.append('circle')
+	.attr('r', 10)
+	.attr('cx', function(d, i){
+		return i*50;
+	})
+	.style('fill', function(d){
+		return scaleSequential(d);
+	});
+
+// clamping
+var clamp_data = [0, 2, 3, 5, 7, 10]
+var clamp_data2 = [-10, 2, 3, 5, 7, 20]
+
+var clampScale = d3.scaleLinear()
+	.domain([0, 10])
+	.range([20, 480])
+	.clamp(true);
+
+d3.select('.clamp .circle_area')
+	.selectAll('circle')
+	.data(clamp_data)
+	.enter()
+	.append('circle')
+	.attr('r', 3)
+	.attr('cx', function(d){
+		return clampScale(d);
+	});
+
+d3.select('.clamp .text_area')
+	.selectAll('text')
+	.data(clamp_data)
+	.enter()
+	.append('text')
+	.text(function(d){
+		return d;
+	})
+	.attr('x', function(d){
+		return clampScale(d)+5;
+	})
+	.attr('y', 5);
+
+d3.select('.clamp .circle_area2')
+	.selectAll('circle')
+	.data(clamp_data2)
+	.enter()
+	.append('circle')
+	.attr('r', 3)
+	.attr('cx', function(d){
+		return clampScale(d);
+	})
+	.attr('cy', 20);
+
+d3.select('.clamp .text_area2')
+	.selectAll('text')
+	.data(clamp_data2)
+	.enter()
+	.append('text')
+	.text(function(d){
+		return d;
+	})
+	.attr('x', function(d){
+		return clampScale(d)+5;
+	})
+	.attr('y', 25);
+
+// nice
+var nice_data = [0.23, 0.44, 0.12, 0.88, 0.91];
+var extent = d3.extent(nice_data); //d3.extent（最小値と最大値を配列で返す）
+
+var niceScaleWithoutNice = d3.scaleLinear()
+	.domain(extent)
+	.range([20, 480])
+
+var niceScaleWithNice = d3.scaleLinear()
+	.domain(extent)
+	.range([20, 480])
+	.nice();
+
+var axisWithoutNice = d3.axisBottom(niceScaleWithoutNice);
+var axisWithNice = d3.axisBottom(niceScaleWithNice);
+
+d3.select('.axis_withoutNice')
+	.call(axisWithoutNice);
+
+d3.select('.axis_withNice')
+	.call(axisWithNice);
+
+// invert
+var invertScale = d3.scaleLinear()
+	.domain([0, 100])
+	.range([0, 500])
+	.nice();
+
+var clickArea = d3.select('.click-area').node();
+// .node()はselectで指定した要素の一番初めのnullではない要素が返される
+// d3.mouseイベントは　nodeで指定するので、node()に変換する必要がある
+// console.log(clickArea); // --> <rect class="click-area" width="500" height="40"></rect>
+
+var axis = d3.axisBottom(invertScale);
+d3.select('.axis_invert')
+	.call(axis);
+
+d3.select('.click-area')
+	.attr('width', 500)
+	.attr('height', 40)
+	.on('click', doClick);
+
+function doClick() {
+	var pos = d3.mouse(clickArea);
+	var xPos = pos[0];
+	var value = invertScale.invert(xPos); // ここで元の値に変換
+	d3.select('.invert_info')
+		.text('You clicked ' + value.toFixed(2));
+}
+
+
+</script>
+</body>
+</html>
