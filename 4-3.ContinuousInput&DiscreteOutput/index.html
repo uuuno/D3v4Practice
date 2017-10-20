@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<head>
+	<title>D3v4入門 - 4-1.Scale functions (Scales with continuous input and continuous output)</title>
+</head>
+
+<style>
+
+svg{
+  background-color: #eee;
+	margin: 0;
+}
+
+circle{
+  fill: rgb(123, 136, 134);
+}
+
+</style>
+
+<body>
+
+	<h2>scaleQuantize（量子化）</h2>
+	<svg class="quantize" width="500" height="100">
+		<g class="circle_area" transform='translate(30, 50)'></g>
+		<g class="text_area" transform='translate(35, 50)'></g>
+		<g class="comment_area" transform='translate(35, 70)'></g>
+	</svg>
+
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/4.10.2/d3.js"></script>
+<script>
+
+// scaleQuantize
+var score_data = [
+	{name:'yamada', score:89},
+	{name:'sakai', score:79},
+	{name:'onishi', score:44},
+	{name:'tabata', score:14},
+	{name:'konno', score:31}
+]
+var score_range = ['再', '可', '良', '優', '秀'];
+
+var scaleQuantize = d3.scaleQuantize()
+	.domain([0, 100])
+	.range(score_range);
+
+d3.select('.quantize .circle_area')
+	.selectAll('circle')
+	.data(score_data)
+	.enter()
+	.append('circle')
+	.attr('r', 3)
+	.attr('cx', function(d, i){
+		return i*80;
+	});
+
+d3.select('.quantize .text_area')
+	.selectAll('text')
+	.data(score_data)
+	.enter()
+	.append('text')
+	.attr('x', function(d, i){
+		return i*80;
+	})
+	.text(function(d){
+		return d.name;
+	});
+
+d3.select('.quantize .comment_area')
+	.selectAll('text')
+	.data(score_data)
+	.enter()
+	.append('text')
+	.attr('x', function(d, i){
+		return i*80;
+	})
+	.text(function(d){
+		return scaleQuantize(d.score);
+	});
+
+
+</script>
+</body>
+</html>
