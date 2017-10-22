@@ -20,7 +20,22 @@ circle{
 <body>
 
 	<h2>scaleQuantize（量子化）</h2>
+	※範囲外の値はClampされます。
 	<svg class="quantize" width="500" height="100">
+		<g class="circle_area" transform='translate(30, 50)'></g>
+		<g class="text_area" transform='translate(35, 50)'></g>
+		<g class="comment_area" transform='translate(35, 70)'></g>
+	</svg>
+
+	<h2>scaleQuantile（数値配列による量子化）</h2>
+	scaleQuantizeは[0, 100]をdomainの引数にとりますが、scaleQuantizeは数列をdomainに取ることができます。
+	<br>rangeに3つの配列を渡すと、3等分にすることができます。
+	<svg class="quantile" width="500" height="100">
+		<g class="circle_area" transform='translate(30, 50)'></g>
+	</svg>
+
+	<h2>scaleThreshold（閾値）</h2>
+	<svg class="threshold" width="500" height="100">
 		<g class="circle_area" transform='translate(30, 50)'></g>
 		<g class="text_area" transform='translate(35, 50)'></g>
 		<g class="comment_area" transform='translate(35, 70)'></g>
@@ -79,7 +94,48 @@ d3.select('.quantize .comment_area')
 		return scaleQuantize(d.score);
 	});
 
+// scaleQuantile
+var quantile_data = [5, 50, 30, 34, 55, 33, 65, 70, 98]
+
+var scaleQuantile = d3.scaleQuantile()
+ 	.domain(quantile_data)
+	.range(['lightblue', 'orange', 'lightgreen']);
+
+d3.select('.quantile .circle_area')
+	.selectAll('circle')
+	.data(quantile_data)
+	.enter()
+	.append('circle')
+	.attr('r', 3)
+	.attr('cx', function(d, i){
+		return i*50;
+	})
+	.style('fill', function(d){
+		return scaleQuantile(d);
+	});
+
+// scaleThreshold
+var threshold_data = [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100]
+
+var scaleThreshold = d3.scaleThreshold()
+	.domain([60, 70, 90])
+	.range(['#ccc', 'rgb(117, 246, 245)', 'rgb(67, 221, 125)', 'rgb(255, 211, 125)']);
+// domainで閾値を3つ設定したので、rangeでは3+1=4つの領域での色を設定
+
+d3.select('.threshold .circle_area')
+	.selectAll('circle')
+	.data(threshold_data)
+	.enter()
+	.append('circle')
+	.attr('r', 5)
+	.attr('cx', function(d){
+		return d*4.5;
+	})
+	.style('fill', function(d){
+		return scaleThreshold(d);
+	});
 
 </script>
+
 </body>
 </html>

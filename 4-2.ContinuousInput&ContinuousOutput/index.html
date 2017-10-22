@@ -80,7 +80,10 @@ circle{
 	<div class="invert_info">Click on the grey band</div>
 
 </div>
-
+<script
+  src="https://code.jquery.com/jquery-2.2.4.min.js"
+  integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="
+  crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/4.10.2/d3.js"></script>
 <script>
 
@@ -351,6 +354,14 @@ var clickArea = d3.select('.click-area').node();
 // d3.mouseイベントは　nodeで指定するので、node()に変換する必要がある
 // console.log(clickArea); // --> <rect class="click-area" width="500" height="40"></rect>
 
+function doClick() {
+	var pos = d3.mouse(clickArea);
+	var xPos = pos[0];
+	var value = invertScale.invert(xPos); // ここで元の値に変換
+	d3.select('.invert_info')
+		.text('You clicked ' + value.toFixed(2));
+}
+
 var axis = d3.axisBottom(invertScale);
 d3.select('.axis_invert')
 	.call(axis);
@@ -359,14 +370,6 @@ d3.select('.click-area')
 	.attr('width', 500)
 	.attr('height', 40)
 	.on('click', doClick);
-
-function doClick() {
-	var pos = d3.mouse(clickArea);
-	var xPos = pos[0];
-	var value = invertScale.invert(xPos); // ここで元の値に変換
-	d3.select('.invert_info')
-		.text('You clicked ' + value.toFixed(2));
-}
 
 
 </script>
