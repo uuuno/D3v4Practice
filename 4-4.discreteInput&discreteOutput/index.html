@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<head>
+	<title>D3v4入門 - 4-4.Scale functions (Scales with discrete input and discrete output)</title>
+</head>
+
+<style>
+
+svg{
+  background-color: #eee;
+	margin: 0;
+}
+
+circle{
+  fill: rgb(123, 136, 134);
+}
+
+</style>
+
+<body>
+
+	<h2>scaleOrdinal（順序）</h2>
+	※scaleOrdinalはdomainの配列に対して、rangeで指定した配列を繰り返し順番に割り当てるイメージです。
+	例えば、0から数字を読んでいって、3の倍数だけ色を変えることを考えます。
+	<svg class="ordinal" width="500" height="100">
+		<g class="text_area" transform='translate(35, 50)'></g>
+	</svg>
+
+	<h2>scaleband（棒グラフ）</h2>
+	<svg class="band" width="500" height="300">
+		<g class="wrap" transform='translate(35, 50)'></g>
+	</svg>
+
+	<h2>scalePoint（）</h2>
+	<svg class="point" width="500" height="300">
+		<g class="wrap" transform='translate(35, 50)'></g>
+	</svg>
+
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/4.10.2/d3.js"></script>
+<script>
+
+// scaleOrdinal
+var ordinal_data = [1 ,2 ,3 ,4 ,5 ,6 ,7 ,8 ,9 ,10];
+
+var scaleOrdinal = d3.scaleOrdinal()
+	.domain(ordinal_data)
+	.range(['#ccc', '#ccc', 'rgb(255, 82, 108)']);
+
+d3.select('.ordinal .text_area')
+	.selectAll('text')
+	.data(ordinal_data)
+	.enter()
+	.append('text')
+	.text(function(d){
+		return d;
+	})
+	.attr('x', function(d, i){
+		return d*40;
+	})
+	.style('fill', function(d){
+		return scaleOrdinal(d);
+	});
+
+// scaleBand
+var band_data = [
+	{day : 'Mon', value: 10},
+	{day : 'Tue', value: 40},
+	{day : 'Wed', value: 30},
+	{day : 'Thu', value: 60},
+	{day : 'Fri', value: 30}
+]
+
+var scaleBand = d3.scaleBand()
+	.domain(['Mon', 'Tue', 'Wed', 'Thu', 'Fri'])
+	.range([0, 200]) //rangeは描画するエリア（ここではy=0からy=200の中に描画するように指定している）
+	.paddingInner(0.1); //.paddingInnerはバーとバーとの間隔
+	//.paddingOuterで両サイドとのバーの余白を指定できる
+
+d3.select('.band .wrap')
+	.selectAll('rect')
+	.data(band_data)
+	.enter()
+	.append('rect')
+	.attr('y', function(d){
+		return scaleBand(d.day); //scaleBand()はdomainの数を考慮して、バーの位置を返す
+	})
+	.attr('height', scaleBand.bandwidth()) ///scaleBand()はdomainの数を考慮して、バーの高さ
+	.attr('width', function(d){
+		return d.value;
+	});
+
+</script>
+
+</body>
+</html>
