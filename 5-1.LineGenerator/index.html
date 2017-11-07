@@ -40,6 +40,14 @@ path {
 		<path><path>
 	</svg>
 
+	<h2>.radialLine（ラジアン）</h2>
+	line()のx,yに似ているが、こちらは角度と中心点からの距離を指定する。<br>
+	[角度(ラジアン), 中心点からの距離]の形でデータを作成する。
+	※ x(), y()のように、angle()とradius()を別々に指定することもできる。
+	<svg class="radial" width="500" height="300">
+		<g transform="translate(250,150)"></g>
+	</svg>
+
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/4.10.2/d3.js"></script>
@@ -108,7 +116,7 @@ var curve_data = [
 
 var curveGenerator = d3.line()
 	// .curve(d3.curveLinear); //直線
-	// .curve(d3.curveCardinal); //曲線
+	.curve(d3.curveCardinal); //曲線
 	// .curve(d3.curveCatmullRom);
 	// .curve(d3.curveMonotone);
 	// .curve(d3.curveNatural);
@@ -133,6 +141,49 @@ d3.select('.curve')
 		return d[1];
 	})
 	.attr('r', 3);
+
+// radial
+var radial_data = [
+	[0, 100],
+	[Math.PI * 0.25, 100],
+	[Math.PI * 0.5, 100],
+	[Math.PI * 0.75, 200],
+	[Math.PI, 100],
+	[Math.PI * 1.25, 100],
+	[Math.PI * 1.5, 100],
+	[Math.PI * 1.75, 50],
+	[Math.PI * 2, 100]
+];
+
+var radialLineGenerator = d3.radialLine();
+var radialLine = radialLineGenerator(radial_data);
+
+d3.select('.radial g')
+	.append('path')
+	.attr('d', radialLine);
+
+radial_center = [1];
+radial_center_text = ['center'];
+
+d3.select('.radial g')
+	.selectAll('circle')
+	.data(radial_center)
+	.enter()
+	.append('circle')
+	.attr('r', 3)
+	.attr('cx', 0)
+	.attr('cy', 0);
+
+d3.select('.radial g')
+	.selectAll('text')
+	.data(radial_center_text)
+	.enter()
+	.append('text')
+	.attr('x', 0)
+	.attr('y', 0)
+	.text(function(d){
+		return d;
+	});
 
 </script>
 
