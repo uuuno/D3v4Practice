@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<head>
+	<title>D3v4入門 - 5-2.Shapes (Area generator)</title>
+</head>
+
+<style>
+
+svg{
+  background-color: #eee;
+	margin: 0;
+}
+
+path {
+	fill: rgb(255, 186, 96);
+	stroke: black;
+}
+
+</style>
+
+<body>
+
+	<h2>.area</h2>
+	<svg class="area" width="500" height="300">
+		<g transform="translate(20, 20)">
+		<path><path>
+		</g>
+	</svg>
+
+	<h2>.area().y0()（ベースラインの指定）</h2>
+	<svg class="area_y" width="500" height="300">
+		<g transform="translate(20, 20)">
+		<path><path>
+		</g>
+	</svg>
+
+	<h2>.area().y0().y1()（ベースラインの上下指定）</h2>
+	y0で下のベースラインを指定し、y1で上のトップラインを指定できる。
+	<svg class="area_yy" width="500" height="300">
+		<g transform="translate(20, 20)">
+		<path><path>
+		</g>
+	</svg>
+
+	<!-- <h2>.x .y (xとyを別々に指定してする)</h2>
+	<svg class="xy" width="500" height="300">
+		<path><path>
+	</svg> -->
+
+
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/4.10.2/d3.js"></script>
+<script>
+
+// .area()
+var area_data = [
+	[10, 30],
+	[60, 60],
+	[150, 20],
+	[350, 130],
+	[400, 200]
+];
+
+var areaGenerator = d3.area(); // area()で作り方を定義
+var area = areaGenerator(area_data); //area()作成したインスタンスにデータを入れる
+
+d3.select('.area path')
+	.attr('d', area);
+
+var areaGenerator_y = d3.area().y0(200) // .y0()によりベースラインを指定できる、指定しない場合はy0(0)
+var area_y = areaGenerator_y(area_data); //area()作成したインスタンスにデータを入れる
+
+d3.select('.area_y path')
+	.attr('d', area_y);
+
+// .area().y0().y1()
+var areaGenerator_yy = d3.area()
+.x(function(d){
+	return d[0];
+})
+.y0(function(d){  // .y0()によりベースラインを指定できる、指定しない場合はy0(0)
+	// return d[1];
+	return d[1]+50;
+})
+.y1(function(d){
+	return d[1];
+})
+
+var area_yy = areaGenerator_yy(area_data); //area()作成したインスタンスにデータを入れる
+
+d3.select('.area_yy path')
+	.attr('d', area_yy);
+
+
+</script>
+
+</body>
+</html>
