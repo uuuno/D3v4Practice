@@ -42,10 +42,13 @@ path {
 		</g>
 	</svg>
 
-	<!-- <h2>.x .y (xとyを別々に指定してする)</h2>
-	<svg class="xy" width="500" height="300">
+	<h2>.radicalArea</h2>
+	<svg class="area_radial" width="500" height="300">
+		<g transform="translate(200, 200)">
 		<path><path>
-	</svg> -->
+		</g>
+	</svg>
+
 
 
 </div>
@@ -92,6 +95,35 @@ var area_yy = areaGenerator_yy(area_data); //area()作成したインスタン�
 d3.select('.area_yy path')
 	.attr('d', area_yy);
 
+
+//radialArea
+var radial_data = [
+	{angle:0, r0:10, r1:30},
+	{angle:Math.PI * 0.25, r0:10, r1:50},
+	{angle:Math.PI * 0.5, r0:10, r1:30},
+	{angle:Math.PI * 0.75, r0:10, r1:50},
+	{angle:Math.PI, r0:10, r1:30},
+	{angle:Math.PI * 1.25, r0:10, r1:50},
+	{angle:Math.PI * 1.5, r0:10, r1:30},
+	{angle:Math.PI * 1.75, r0:10, r1:50},
+	{angle:Math.PI * 2, r0:10, r1:30}
+];
+
+var areaGenerator_radial = d3.radialArea()
+	.angle(function(d){
+		return d.angle;
+	})
+	.innerRadius(function(d){
+		return d.r0;
+	})
+	.outerRadius(function(d){
+		return d.r1;
+	});
+
+var area_radial = areaGenerator_radial(radial_data);
+
+d3.select('.area_radial path')
+		.attr('d', area_radial);
 
 </script>
 
