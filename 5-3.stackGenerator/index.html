@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<head>
+	<title>D3v4入門 - 5-3.Shapes (Stack generator)</title>
+</head>
+
+<style>
+
+svg{
+  background-color: #eee;
+	margin: 0;
+}
+
+path {
+	fill: rgb(255, 186, 96);
+	/*stroke: black;*/
+}
+
+</style>
+
+<body>
+
+	<h2>.stack</h2>
+	<svg class="stack" width="500" height="300">
+		<g transform="translate(20, 20)">
+		</g>
+	</svg>
+
+	<h2>.stack().order()</h2>
+	<svg class="order" width="600" height="300">
+		<g transform="translate(200, 20)" id="stackOrderNone">
+		</g>
+		<g transform="translate(200, 60)" id="stackOrderAscending">
+		</g>
+		<g transform="translate(200, 100)" id="stackOrderDescending">
+		</g>
+		<g transform="translate(200, 140)" id="stackOrderInsideOut">
+		</g>
+		<g transform="translate(200, 180)" id="stackOrderReverse">
+		</g>
+	</svg>
+
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/4.10.2/d3.js"></script>
+<script
+  src="https://code.jquery.com/jquery-2.2.1.min.js"
+  integrity="sha256-gvQgAFzTH6trSrAWoH1iPo9Xc96QxSZ3feW6kem+O00="
+  crossorigin="anonymous"></script>
+<script>
+
+// .stack
+var colors = ['#FBB65B', '#513551', '#de3163', 'rgb(151, 166, 181)', 'rgb(194, 223, 116)'];
+
+var stack_data = [
+	{math: 80, english: 68, history: 70},
+	{math: 64, english: 80, history: 55},
+	{math: 100, english: 43, history: 56},
+	{math: 40, english: 95, history: 88},
+	{math: 70, english: 98, history: 50}
+];
+
+var stack = d3.stack()
+	.order(d3.stackOrderInsideOut)
+	.keys(['math', 'english', 'history']);
+
+
+var stackedSeries = stack(stack_data)
+// console.log(stackedSeries); //stackedSeriesは3行5列の2次元配列
+
+// subject別（math, english, history別）に<g>を作成する
+d3.select('.stack g')
+	.selectAll('.subject')
+	.data(stackedSeries) //key数分作成される
+	.enter()
+	.append('g')
+	.classed('subject', true)
+	.style('fill', function(d, i){
+		return colors[i];
+	})
+	.selectAll('rect')
+	.data(function(d) { //5人分の成績が順番に入る,要素数２の配列でrectの始点と終点が入る
+		return d;
+	})
+	.enter()
+	.append('rect')
+	.attr('width', function(d) {
+		return d[1] - d[0];
+	})
+	.attr('x', function(d) {
+		return d[0];
+	})
+	.attr('y', function(d, i) {
+		return i * 35;
+	})
+	.attr('height', 30);
+
+// stack().order()
+var order_list = [
+	'stackOrderNone',
+	'stackOrderAscending',
+	'stackOrderDescending',
+	'stackOrderInsideOut',
+	'stackOrderReverse'
+];
+
+var order_data = [
+	{english: 50, math: 10, science: 60, japanese: 30, history: 100},
+];
+
+var stack_stackOrderNone = d3.stack()
+	.order(d3.stackOrderNone)
+	.keys(['english', 'math', 'science', 'japanese', 'history']);
+var stackedSeries_stackOrderNone = stack_stackOrderNone(order_data)
+
+var stack_stackOrderAscending = d3.stack()
+	.order(d3.stackOrderAscending)
+	.keys(['english', 'math', 'science', 'japanese', 'history']);
+var stackedSeries_stackOrderAscending = stack_stackOrderAscending(order_data)
+
+var stack_stackOrderDescending = d3.stack()
+	.order(d3.stackOrderDescending)
+	.keys(['english', 'math', 'science', 'japanese', 'history']);
+var stackedSeries_stackOrderDescending = stack_stackOrderDescending(order_data)
+
+var stack_stackOrderInsideOut	 = d3.stack()
+	.order(d3.stackOrderInsideOut)
+	.keys(['english', 'math', 'science', 'japanese', 'history']);
+var stackedSeries_stackOrderInsideOut = stack_stackOrderInsideOut(order_data)
+
+var stack_stackOrderReverse = d3.stack()
+	.order(d3.stackOrderReverse)
+	.keys(['english', 'math', 'science', 'japanese', 'history']);
+var stackedSeries_stackOrderReverse = stack_stackOrderReverse(order_data)
+
+
+// subject別（math, english, history別）に<g>を作成する
+function orderedStack(stackSeries){
+	stackSeriesName = 'stackedSeries_' + stackSeries;
+	d3.select('#' + stackSeries)
+		.selectAll('.subject')
+		.data(eval(stackSeriesName)) //key数分作成される
+		.enter()
+		.append('g')
+		.classed('subject', true)
+		.style('fill', function(d, i){
+			return colors[i];
+		})
+		.selectAll('rect')
+		.data(function(d) {
+			return d;
+		})
+		.enter()
+		.append('rect')
+		.attr('width', function(d) {
+			return d[1] - d[0];
+		})
+		.attr('x', function(d) {
+			return d[0];
+		})
+		.attr('y', function(d, i) {
+			return i * 35;
+		})
+		.attr('height', 30)
+		.text('assas');
+}
+
+
+for (orderName of order_list) {
+	orderedStack(orderName);
+}
+
+
+d3.select('.order')
+	.selectAll('text')
+	.data(order_list)
+	.enter()
+	.insert('text')
+	.text(function(d){
+		return d;
+	})
+	.attr('y', function(d, i){
+		return 40+i*40
+	});
+
+
+
+
+</script>
+
+</body>
+</html>
