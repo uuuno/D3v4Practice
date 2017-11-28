@@ -16,6 +16,10 @@ path {
 	/*stroke: black;*/
 }
 
+text {
+  text-anchor: end;
+}
+
 </style>
 
 <body>
@@ -61,11 +65,10 @@ var stack_data = [
 ];
 
 var stack = d3.stack()
-	.order(d3.stackOrderInsideOut)
 	.keys(['math', 'english', 'history']);
 
 
-var stackedSeries = stack(stack_data)
+var stackedSeries = stack(stack_data);
 // console.log(stackedSeries); //stackedSeriesは3行5列の2次元配列
 
 // subject別（math, english, history別）に<g>を作成する
@@ -179,11 +182,10 @@ d3.select('.order')
 	.text(function(d){
 		return d;
 	})
+	.attr('x', 190)
 	.attr('y', function(d, i){
 		return 40+i*40
 	});
-
-
 
 
 </script>
