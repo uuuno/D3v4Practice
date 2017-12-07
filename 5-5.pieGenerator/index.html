@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<head>
+	<title>D3v4入門 - 5-4.Shapes (Pie generator)</title>
+</head>
+
+<style>
+
+svg{
+  background-color: #eee;
+	margin: 0;
+}
+
+path {
+	fill: orange;
+}
+
+</style>
+
+<body>
+
+	<h2>.pie</h2>
+	pie()は数列を与えるだけで、先ほどのstartAngleとendAngleの辞書型の配列データに変換してくれます。
+	<br>デフォルトでは降順にソートされます。変更したい場合には.pie().sort()により変更することができます。
+	<svg class="pie" width="500" height="300">
+		<g transform="translate(250, 150)"> <!-- これが中心点になる -->
+		</g>
+	</svg>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/4.10.2/d3.js"></script>
+<script
+  src="https://code.jquery.com/jquery-2.2.1.min.js"
+  integrity="sha256-gvQgAFzTH6trSrAWoH1iPo9Xc96QxSZ3feW6kem+O00="
+  crossorigin="anonymous"></script>
+<script>
+
+// .pie
+var pie_data = [12, 3, 42, 90, 20];
+var arcData = d3.pie()(pie_data);
+
+var arcGenerator = d3.arc()
+	.innerRadius(20)
+	.outerRadius(100)
+	.padAngle(0.01)
+
+d3.select('.pie g')
+	.selectAll('path')
+	.data(arcData)
+	.enter()
+	.append('path')
+	.attr('d', arcGenerator);
+
+
+</script>
+
+</body>
+</html>

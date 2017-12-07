@@ -40,20 +40,26 @@ path {
 <script>
 
 // .arc
-var arcGenerator = d3.arc();
-
-var arcPath = arcGenerator({
-	startAngle: 0,
-	endAngle: 0.25 * Math.PI,
-	innerRadius: 50,
-	outerRadius: 100
-});
+// ↓メソッドチェーンまたはCSS的に指定も可能
+// var arcPath = d3.arc()({
+// 	startAngle: 0,
+// 	endAngle: 0.25 * Math.PI,
+// 	innerRadisus: 50,
+// 	outerRadius: 100
+// });
+var arcPath = d3.arc()
+	.startAngle(0)
+	.endAngle(0.25 * Math.PI)
+	.innerRadius(50)
+	.outerRadius(100)
 
 d3.select('.arc g')
 	.append('path')
 	.attr('d', arcPath);
 
+
 // .arc（複数）
+// ↓startAngle,endAngleのセットの辞書型の配列を与える（名前は変更不可）
 var arcData = [
 	{startAngle: 0, endAngle: 0.2},
 	{startAngle: 0.2, endAngle: 0.5},
@@ -74,6 +80,7 @@ d3.select('.arc_multi g')
 	.enter()
 	.append('path')
 	.attr('d', arcGeneratorMulti);
+
 
 </script>
 
