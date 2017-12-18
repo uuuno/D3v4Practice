@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<head>
+	<title>D3v4入門 - 6-2.Layouts (Treemap layout)</title>
+</head>
+
+<style>
+
+rect{
+  fill: rgb(161, 199, 149);
+	stroke: #fff;
+}
+
+svg{
+	background-color: #eee;
+}
+
+.link {
+	fill: orange;
+	stroke: #ccc;
+	stroke-width:5px;
+}
+
+</style>
+
+<body>
+
+	<h2>.treemap</h2>
+	<svg class="treemap" width="500" height="300">
+		<g></g>
+	</svg>
+
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/4.10.2/d3.js"></script>
+<script
+  src="https://code.jquery.com/jquery-2.2.1.min.js"
+  integrity="sha256-gvQgAFzTH6trSrAWoH1iPo9Xc96QxSZ3feW6kem+O00="
+  crossorigin="anonymous"></script>
+<script>
+
+// .
+var data = {
+  "name": "A1",
+  "children": [
+    {
+      "name": "B1",
+      "children": [
+        {
+          "name": "C1",
+          "value": 100
+        },
+        {
+          "name": "C2",
+          "value": 300
+        },
+        {
+          "name": "C3",
+          "value": 200
+        }
+      ]
+    },
+    {
+      "name": "B2",
+      "value": 200
+    }
+  ]
+}
+
+var treemapLayout = d3.treemap()
+	.size([400, 200])
+	.paddingOuter(16);
+
+var root = d3.hierarchy(data) // 辞書型の階層構造をD3のデータフォーマットに変形
+
+// sumにより親階層に子階層の合計値sumが付与される
+root.sum(function(d){
+	return d.value;
+});
+
+treemapLayout(root) //階層データrootをtree形式のデータ(x, yを追加)にしてくれる
+
+//Nodes
+var nodes = d3.select('.treemap g')
+	.selectAll('g')
+	.data(root.descendants())
+	.enter()
+	.append('g')
+	.attr('transform', function(d){return 'translate(' + [d.x0, d.y0] + ')'})
+
+nodes
+	.append('rect')
+	.attr('width', function(d){return d.x1 - d.x0;})
+	.attr('height', function(d){return d.y1 - d.y0;})
+
+nodes
+	.append('text')
+	.attr('dx', 4)
+	.attr('dy', 14)
+	.text(function(d) {
+		return d.data.name;
+	})
+
+
+
+</script>
+
+</body>
+</html>
